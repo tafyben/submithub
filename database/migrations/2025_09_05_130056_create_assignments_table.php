@@ -13,15 +13,24 @@ return new class extends Migration
     {
         Schema::create('assignments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            // Student who requests the assignment
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            // Admin who prepares/completes the assignment (nullable)
+            $table->foreignId('admin_id')->nullable()->constrained('users')->onDelete('set null');
             $table->string('title');
             $table->text('description')->nullable();
-            $table->string('file_path')->nullable();
+            // Optional files
+            $table->string('request_file_path')->nullable();
+            $table->string('response_file_path')->nullable();
+            // Assignment status
+            $table->enum('status', ['pending', 'submitted', 'completed'])->default('pending');
+
+            // When admin submits
             $table->timestamp('submitted_at')->nullable();
-            $table->enum('status', ['pending', 'submitted', 'graded'])->default('pending');
-            $table->string('grade')->nullable();
+
+            // Feedback from admin
             $table->text('feedback')->nullable();
-            $table->timestamps();
+
             $table->timestamps();
         });
     }
