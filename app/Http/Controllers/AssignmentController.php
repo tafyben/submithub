@@ -31,13 +31,13 @@ class AssignmentController extends Controller
             $assignments = Assignment::with('student')->latest()->get();
         }
 
-        return view('assignments.index', compact('assignments'));
+        return view('student.assignments.index', compact('assignments'));
     }
 
     // Student: show form to request assignment
     public function create()
     {
-        return view('assignments.create');
+        return view('student.assignments.create');
     }
 
     // Student: store assignment request
@@ -61,7 +61,7 @@ class AssignmentController extends Controller
             'status' => 'pending',
         ]);
 
-        return redirect()->route('assignments.index')->with('success', 'Assignment request submitted!');
+        return redirect()->route('student.assignments.index')->with('success', 'Assignment request submitted!');
     }
 
     // Admin: show assignment details for processing
@@ -69,7 +69,7 @@ class AssignmentController extends Controller
     {
         $this->authorize('view', $assignment); // optional, for security
 
-        return view('assignments.show', compact('assignment'));
+        return view('admin.assignments.show', compact('assignment'));
     }
 
     // Admin: update assignment (upload prepared file, feedback, mark completed)
@@ -95,6 +95,8 @@ class AssignmentController extends Controller
 
         $assignment->save();
 
-        return redirect()->route('assignments.index')->with('success', 'Assignment updated!');
+        return redirect()->route('student.assignments.index')->with('success', 'Assignment updated!');
     }
+
+
 }
