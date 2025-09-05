@@ -17,4 +17,19 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
+// Student routes
+Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')->group(function () {
+    Route::get('/assignments', [AssignmentController::class, 'studentIndex'])->name('assignments.index');
+    Route::get('/assignments/create', [AssignmentController::class, 'create'])->name('assignments.create');
+    Route::post('/assignments', [AssignmentController::class, 'store'])->name('assignments.store');
+});
+
+// Admin routes
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/assignments', [AssignmentController::class, 'adminIndex'])->name('assignments.index');
+    Route::get('/assignments/{assignment}', [AssignmentController::class, 'show'])->name('assignments.show');
+    Route::put('/assignments/{assignment}', [AssignmentController::class, 'update'])->name('assignments.update');
+});
+
 require __DIR__.'/auth.php';
