@@ -95,7 +95,12 @@ class AssignmentController extends Controller
 
         $assignment->save();
 
-        return redirect()->route('student.assignments.index')->with('success', 'Assignment updated!');
+        // Redirect based on role
+        if (Auth::user()->hasRole('admin')) {
+            return redirect()->route('admin.assignments.index')->with('success', 'Assignment updated!');
+        } else {
+            return redirect()->route('student.assignments.index')->with('success', 'Assignment updated!');
+        }
     }
 
 
